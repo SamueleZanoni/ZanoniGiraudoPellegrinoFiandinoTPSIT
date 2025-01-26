@@ -23,6 +23,14 @@ namespace ProgettoMeteo.Models
             return await response.Content.ReadAsStringAsync();
         }
 
+        public async Task<string> Meteo5Giorni(float latitudine, float longitudine)
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, $"api.openweathermap.org/data/2.5/forecast?lat={latitudine}&lon={longitudine}&appid=bec2cee97778ae672a64740c7aa3657d");
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
 
+            return await response.Content.ReadAsStringAsync();
+        }
     }
 }
