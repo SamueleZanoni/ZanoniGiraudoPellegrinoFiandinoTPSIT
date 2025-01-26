@@ -1,0 +1,6 @@
+﻿Alex:
+-modificare controller per view
+-creare model parametri
+
+William:
+-
