@@ -3,4 +3,4 @@
 -creare model parametri
 
 William:
--
+-chat gpt
