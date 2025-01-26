@@ -1,3 +1,5 @@
+using ProgettoMeteo.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +7,7 @@ builder.Services.AddControllersWithViews();
 
 // Registrazione del servizio UtilityService
 builder.Services.AddSingleton<ProgettoMeteo.Services.UtilityService>();
+builder.Services.AddScoped<Api>();
 
 var app = builder.Build();
 
@@ -25,6 +28,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Meteo}/{action=Index}/{id?}");
 
 app.Run();

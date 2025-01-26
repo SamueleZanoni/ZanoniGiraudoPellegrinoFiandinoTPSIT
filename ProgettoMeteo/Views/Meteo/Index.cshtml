@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Ricerca Meteo";
+}
+
+<h1>Ricerca Meteo</h1>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <p style="color: red;">@ViewBag.ErrorMessage</p>
+}
+
+<form asp-action="CercaCitta" asp-controller="Meteo" method="post">
+    <input type="text" name="nomeCitta" placeholder="Inserisci il nome della città" required />
+    <button type="submit">Cerca</button>
+</form>
+
+<style>
+    input, button {
+        padding: 10px;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+</style>
