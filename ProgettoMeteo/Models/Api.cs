@@ -1,6 +1,12 @@
-﻿
+﻿using System.Text.Json;
+
 namespace ProgettoMeteo.Models
 {
+    public class Luogo
+    {
+        public float Lat { get; set; }
+        public float Lon { get; set; }
+    }
     public class Api
     {
         #region "OpenWeather"
@@ -12,6 +18,24 @@ namespace ProgettoMeteo.Models
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<string> OttieniMeteoPerCitta(string nomeCitta)
+        {
+            var geoResponse = await MeteoGeoLocation(nomeCitta);
+
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var loughi = JsonSerializer.Deserialize<Luogo[]>(geoResponse, options);
+
+            if (loughi == null || loughi.Length == 0)
+            {
+                throw new Exception("Città non trovata.");
+            }
+
+            float latitudine = loughi[0].Lat;
+            float longitudine = loughi[0].Lon;
+
+            return await MeteoCorrente(latitudine, longitudine);
         }
 
         public async Task<string> MeteoGeoLocation(string nomeCitta)
