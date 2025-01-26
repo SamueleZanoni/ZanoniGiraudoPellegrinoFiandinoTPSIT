@@ -18,7 +18,7 @@ namespace ProgettoMeteo.Models
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Get, $"http://api.openweathermap.org/geo/1.0/direct?q={nomeCitta}&limit=2&appid=bec2cee97778ae672a64740c7aa3657d");
             var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();;
+            response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadAsStringAsync();
         }
