@@ -13,29 +13,32 @@ namespace ProgettoMeteo.Controllers
             _apiService = apiService;
         }
 
+        // GET: /Meteo/Index
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
+        // POST: /Meteo/Index
         [HttpPost]
-        public async Task<IActionResult> CercaCitta(string nomeCitta)
+        public async Task<IActionResult> Index(string nomeCitta)
         {
-            if (string.IsNullOrWhiteSpace(nomeCitta))
+            if (string.IsNullOrEmpty(nomeCitta))
             {
-                ViewBag.ErrorMessage = "Inserisci una città valida.";
-                return View("Index");
+                ViewBag.Error = "Inserisci una città valida.";
+                return View();
             }
 
             try
             {
-                var meteo = await _apiService.OttieniMeteoPerCitta(nomeCitta);
-                return View("Meteo", meteo);
+                var meteoData = await _apiService.OttieniMeteoPerCitta(nomeCitta);
+                return View(meteoData);  // Passiamo i dati meteo alla vista
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Errore durante il recupero dei dati: " + ex.Message;
-                return View("Index");
+                ViewBag.Error = "Errore nel recupero dei dati meteo: " + ex.Message;
+                return View();
             }
         }
     }

@@ -1,0 +1,156 @@
+﻿/* Reset some default margins and paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Title */
+h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #2d2d2d;
+    margin-bottom: 20px;
+}
+
+/* Form */
+.input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+    .input-group input {
+        width: 75%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    .input-group button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+        .input-group button:hover {
+            background-color: #0056b3;
+        }
+
+/* Error message */
+.text-danger {
+    color: red;
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+/* Weather data */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.col-12 {
+    width: 100%;
+}
+
+.col-6 {
+    width: 50%;
+}
+
+.col-md-4 {
+    width: 33.33%;
+}
+
+h2 {
+    font-size: 2rem;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+/* Data details */
+p {
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+strong {
+    font-weight: bold;
+}
+
+/* Weather Icon */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+    .input-group {
+        flex-direction: column;
+    }
+
+        .input-group input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .input-group button {
+            width: 100%;
+        }
+}
+
+@media (max-width: 576px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 10px 0;
+    background-color: #f9f9f9;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.card-img-top {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+h1, h2 {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+

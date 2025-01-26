@@ -1,23 +1,121 @@
 ﻿@{
-    ViewData["Title"] = "Ricerca Meteo";
+    ViewData["Title"] = "Home Page";
 }
 
-<h1>Ricerca Meteo</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
 
-@if (ViewBag.ErrorMessage != null)
-{
-    <p style="color: red;">@ViewBag.ErrorMessage</p>
-}
+    <!-- Aggiungi il link al file CSS -->
+    <link rel="stylesheet" href="~/css/styleIndex.css" />
+</head>
+<body>
+    <div class="container">
+        <!-- Titolo della pagina -->
+        <div class="row">
+            <div class="col-12">
+                <h1>Benvenuto nel Meteo App</h1>
+            </div>
+        </div>
 
-<form asp-action="CercaCitta" asp-controller="Meteo" method="post">
-    <input type="text" name="nomeCitta" placeholder="Inserisci il nome della città" required />
-    <button type="submit">Cerca</button>
-</form>
+        <!-- Barra di ricerca -->
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form method="post" asp-action="Index" asp-controller="Meteo">
+                    <div class="input-group">
+                        <input type="text" name="nomeCitta" class="form-control" placeholder="Inserisci il nome della città" />
+                        <button type="submit" class="btn btn-primary">Cerca</button>
+                    </div>
+                </form>
+            </div>
+        </div><br />
 
-<style>
-    input, button {
-        padding: 10px;
-        font-size: 16px;
-        margin-top: 10px;
-    }
-</style>
+        <!-- Mostra l'errore se presente -->
+        @if (ViewBag.Error != null)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <p class="text-danger">@ViewBag.Error</p>
+                </div>
+            </div>
+        }
+
+        <!-- Se il modello è stato passato e contiene i dati meteo -->
+        @if (Model != null)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <h2>@Model.Location</h2>
+                </div>
+            </div>
+
+            <!-- Mostra informazioni meteo -->
+            <div class="row">
+                <!-- Card per la temperatura -->
+                <div class="col-6 col-md-4">
+                    <div class="card">
+                        <h3 class="card-title">Temperatura</h3>
+                        <p><strong>@Model.Temperature °C</strong></p>
+                        <p><strong>Descrizione:</strong> @Model.Description</p>
+                        <img src="https://openweathermap.org/img/wn/@Model.Icon" alt="Weather Icon" class="card-img-top" />
+                    </div>
+                </div>
+
+                <!-- Card per umidità e pressione -->
+                <div class="col-6 col-md-4">
+                    <div class="card">
+                        <h3 class="card-title">Condizioni atmosferiche</h3>
+                        <p><strong>Umidità:</strong> @Model.Humidity %</p>
+                        <p><strong>Pressione:</strong> @Model.Pressure hPa</p>
+                    </div>
+                </div>
+
+                <!-- Card per vento, alba e tramonto -->
+                <div class="col-6 col-md-4">
+                    <div class="card">
+                        <h3 class="card-title">Vento e Orari</h3>
+                        <p><strong>Vento:</strong> @Model.WindSpeed m/s</p>
+                        <p><strong>Alba:</strong> @Model.Sunrise</p>
+                        <p><strong>Tramonto:</strong> @Model.Sunset</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card per Highlights -->
+            <div class="row">
+                @* <!-- Card per la qualità dell'aria -->
+                <div class="col-6 col-md-4">
+                    <div class="card">
+                        <h3 class="card-title">Qualità dell'Aria</h3>
+                        <p><strong>PM2.5:</strong> @Model.Pm25</p>
+                        <p><strong>SO2:</strong> @Model.SulfurDioxide</p>
+                        <p><strong>NO2:</strong> @Model.NitrogenDioxide</p>
+                        <p><strong>O3:</strong> @Model.Ozone</p>
+                    </div>
+                </div> *@
+
+                <!-- Card per umidità e temperatura percepita -->
+                <div class="col-6 col-md-4">
+                    <div class="card">
+                        <h3 class="card-title">Altri Highlights</h3>
+                        <p><strong>Temperatura percepita:</strong> @Model.FeelsLike °C</p>
+                        <p><strong>Umidità:</strong> @Model.Humidity %</p>
+                    </div>
+                </div>
+
+                <!-- Card per pressione e visibilità -->
+                <div class="col-6 col-md-4">
+                    <div class="card">
+                        <h3 class="card-title">Visibilità e Pressione</h3>
+                        @* <p><strong>Visibilità:</strong> @Model.Visibility km</p> *@
+                        <p><strong>Pressione:</strong> @Model.Pressure hPa</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</body>
+</html>
