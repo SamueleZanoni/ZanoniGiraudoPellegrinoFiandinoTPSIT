@@ -3,6 +3,7 @@ namespace ProgettoMeteo.Models
 {
     public class Api
     {
+        #region "OpenWeather"
         public async Task<string> MeteoCorrente(float latitudine, float longitudine)
         {
             var client = new HttpClient();
@@ -52,5 +53,6 @@ namespace ProgettoMeteo.Models
 
             return await response.Content.ReadAsStringAsync();
         }
+        #endregion
     }
 }
