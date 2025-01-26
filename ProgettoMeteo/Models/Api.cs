@@ -42,5 +42,15 @@ namespace ProgettoMeteo.Models
 
             return await response.Content.ReadAsStringAsync();
         }
+
+        public async Task<string> MeteoMappe(string tipoMappa)
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://tile.openweathermap.org/map/{tipoMappa}/0/0/0.png?appid=bec2cee97778ae672a64740c7aa3657d");
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsStringAsync();
+        }
     }
 }
