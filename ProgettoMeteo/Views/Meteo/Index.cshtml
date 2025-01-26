@@ -86,16 +86,17 @@
 
             <!-- Card per Highlights -->
             <div class="row">
-                @* <!-- Card per la qualità dell'aria -->
+                <!-- Card per la qualità dell'aria -->
                 <div class="col-6 col-md-4">
                     <div class="card">
                         <h3 class="card-title">Qualità dell'Aria</h3>
-                        <p><strong>PM2.5:</strong> @Model.Pm25</p>
-                        <p><strong>SO2:</strong> @Model.SulfurDioxide</p>
-                        <p><strong>NO2:</strong> @Model.NitrogenDioxide</p>
-                        <p><strong>O3:</strong> @Model.Ozone</p>
+                        <p><strong>AQI:</strong> @Model.AQI</p>
+                        <p><strong>PM2.5:</strong> @Model.PM2_5</p>
+                        <p><strong>SO2:</strong> @Model.SO2</p>
+                        <p><strong>NO2:</strong> @Model.NO2</p>
+                        <p><strong>O3:</strong> @Model.O3</p>
                     </div>
-                </div> *@
+                </div>
 
                 <!-- Card per umidità e temperatura percepita -->
                 <div class="col-6 col-md-4">
@@ -110,7 +111,7 @@
                 <div class="col-6 col-md-4">
                     <div class="card">
                         <h3 class="card-title">Visibilità e Pressione</h3>
-                        @* <p><strong>Visibilità:</strong> @Model.Visibility km</p> *@
+                        <p><strong>Visibilità:</strong> @Model.Visibility km</p>
                         <p><strong>Pressione:</strong> @Model.Pressure hPa</p>
                     </div>
                 </div>

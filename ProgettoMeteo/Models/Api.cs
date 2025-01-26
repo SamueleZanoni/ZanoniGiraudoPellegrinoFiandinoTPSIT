@@ -38,6 +38,9 @@ namespace ProgettoMeteo.Models
             var response = await MeteoCorrente(latitudine, longitudine);
             dynamic meteoData = JsonConvert.DeserializeObject<dynamic>(response);
 
+            var pollResponse = await MeteoInquinamento(latitudine, longitudine);
+            dynamic infoPoll = JsonConvert.DeserializeObject<dynamic>(pollResponse);
+
             return new Meteo
             {
                 Location = $"{meteoData["name"]}, {meteoData["sys"]["country"]}",
@@ -49,9 +52,41 @@ namespace ProgettoMeteo.Models
                 Icon = meteoData["weather"][0]["icon"],
                 Sunrise = UnixTimeToDateTime((long)meteoData["sys"]["sunrise"]),
                 Sunset = UnixTimeToDateTime((long)meteoData["sys"]["sunset"]),
-                WindSpeed = (float)meteoData["wind"]["speed"]
+                WindSpeed = (float)meteoData["wind"]["speed"],
+                Visibility = (float)meteoData["visibility"],
+
+                AQI = infoPoll["list"][0]["main"]["aqi"],
+                CO = infoPoll["list"][0]["components"]["co"],
+                NO = infoPoll["list"][0]["components"]["no"],
+                NO2 = infoPoll["list"][0]["components"]["no2"],
+                O3 = infoPoll["list"][0]["components"]["o3"],
+                SO2 = infoPoll["list"][0]["components"]["so2"],
+                PM2_5 = infoPoll["list"][0]["components"]["pm2_5"],
+                PM10 = infoPoll["list"][0]["components"]["pm10"],
+                NH3 = infoPoll["list"][0]["components"]["nh3"]
             };
         }
+
+        public async Task<string> Meteo5Giorni(float latitudine, float longitudine)
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, $"api.openweathermap.org/data/2.5/forecast?lat={latitudine}&lon={longitudine}&appid={apiKey}");
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<string> MeteoInquinamento(float latitudine, float longitudine)
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, $"http://api.openweathermap.org/data/2.5/air_pollution?lat={latitudine}&lon={longitudine}&appid={apiKey}");
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
 
         public async Task<string> MeteoGeoLocation(string nomeCitta)
         {

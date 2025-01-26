@@ -12,5 +12,17 @@
         public string Sunrise { get; set; }
         public string Sunset { get; set; }
         public float WindSpeed { get; set; }
+        public float Visibility { get; set; }
+
+        // Nuovi parametri per l'inquinamento
+        public float AQI { get; set; } // Air Quality Index
+        public float CO { get; set; }  // Carbon Monoxide
+        public float NO { get; set; }  // Nitric Oxide
+        public float NO2 { get; set; } // Nitrogen Dioxide
+        public float O3 { get; set; }  // Ozone
+        public float SO2 { get; set; } // Sulfur Dioxide
+        public float PM2_5 { get; set; } // Particulate Matter (PM 2.5)
+        public float PM10 { get; set; } // Particulate Matter (PM 10)
+        public float NH3 { get; set; }  // Ammonia
     }
 }
