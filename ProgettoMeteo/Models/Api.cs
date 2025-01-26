@@ -3,6 +3,7 @@ namespace ProgettoMeteo.Models
 {
     public class Api
     {
+        #region "OpenWeather"
         public async Task<string> MeteoCorrente(float latitudine, float longitudine)
         {
             var client = new HttpClient();
@@ -23,6 +24,35 @@ namespace ProgettoMeteo.Models
             return await response.Content.ReadAsStringAsync();
         }
 
+        public async Task<string> Meteo5Giorni(float latitudine, float longitudine)
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, $"api.openweathermap.org/data/2.5/forecast?lat={latitudine}&lon={longitudine}&appid=bec2cee97778ae672a64740c7aa3657d");
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
 
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<string> MeteoInquinamento(float latitudine, float longitudine)
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, $"http://api.openweathermap.org/data/2.5/air_pollution?lat={latitudine}&lon={longitudine}&appid=bec2cee97778ae672a64740c7aa3657d");
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<string> MeteoMappe(string tipoMappa)
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://tile.openweathermap.org/map/{tipoMappa}/0/0/0.png?appid=bec2cee97778ae672a64740c7aa3657d");
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsStringAsync();
+        }
+        #endregion
     }
 }
