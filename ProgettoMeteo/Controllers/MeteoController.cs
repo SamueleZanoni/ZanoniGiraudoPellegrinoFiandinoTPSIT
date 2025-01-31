@@ -33,7 +33,8 @@ namespace ProgettoMeteo.Controllers
             try
             {
                 var meteoData = await _apiService.OttieniMeteoPerCitta(nomeCitta);
-                return View(meteoData);  // Passiamo i dati meteo alla vista
+
+                return View(meteoData);
             }
             catch (Exception ex)
             {

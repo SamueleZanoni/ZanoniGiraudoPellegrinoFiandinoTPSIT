@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ProgettoMeteo.Models
 {
@@ -103,5 +104,7 @@ namespace ProgettoMeteo.Models
             var dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTime).DateTime.ToLocalTime();
             return dateTime.ToString("HH:mm"); // Formato 24 ore
         }
+
+        
     }
 }

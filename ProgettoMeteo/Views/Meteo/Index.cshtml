@@ -49,6 +49,7 @@
             <div class="row">
                 <div class="col-12">
                     <h2>@Model.Location</h2>
+                    <h2><img src="@Url.Content(Model.ConvertiIcona(Model.Icon))" alt="Icona"></h2>
                 </div>
             </div>
 
@@ -60,7 +61,7 @@
                         <h3 class="card-title">Temperatura</h3>
                         <p><strong>@Model.Temperature °C</strong></p>
                         <p><strong>Descrizione:</strong> @Model.Description</p>
-                        <img src="https://openweathermap.org/img/wn/@Model.Icon" alt="Weather Icon" class="card-img-top" />
+                        <img src="@Url.Content(Model.ConvertiIcona(Model.Icon))" alt="Weather Icon" class="card-img-top" />
                     </div>
                 </div>
 

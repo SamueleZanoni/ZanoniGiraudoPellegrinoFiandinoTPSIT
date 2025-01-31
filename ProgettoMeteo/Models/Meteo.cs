@@ -1,4 +1,6 @@
-﻿namespace ProgettoMeteo.Models
+﻿using static System.Net.Mime.MediaTypeNames;
+
+namespace ProgettoMeteo.Models
 {
     public class Meteo
     {
@@ -24,5 +26,10 @@
         public float PM2_5 { get; set; } // Particulate Matter (PM 2.5)
         public float PM10 { get; set; } // Particulate Matter (PM 10)
         public float NH3 { get; set; }  // Ammonia
+
+        public string ConvertiIcona(string icona)
+        {
+            return $"~/images/weather_icons/{icona}.png";
+        }
     }
 }
