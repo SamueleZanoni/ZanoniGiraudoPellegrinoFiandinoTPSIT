@@ -1,18 +1,72 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "weatherio";
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
 
-    <!-- Aggiungi il link al file CSS -->
-    <link rel="stylesheet" href="~/css/styleIndex.css" />
+    <meta name="title" content="weatherio">
+
+    <meta name="description" content="weatherio is a weather app made by us">
+
+    <link rel="shortcut icon" href="~/favicon.svg" type="image/svg+xml">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/css/style.css" />
+
 </head>
 <body>
+    <header class="header">
+        <div class="container">
+
+            <a href="#" class="logo">
+                <img src="~/images/logo.png" width="364" height="58" alt="logo">
+            </a>
+
+            <div class="search-view" data-search-view>
+            <form method="post" asp-action="Index" asp-controller="Meteo">
+                <div class="search-wrapper">
+
+
+                        <input type="text" name="nomeCitta" class="search-field" placeholder="Inserisci il nome della città" autocomplete="off" />
+                        <button type="submit" ><span class="m-icon leading-icon">search</span></button>
+
+                       
+                    <button class="icon-btn leading-icon has-state" aria-label="close search">
+                        <span class="m-icon">arrow_back</span>
+                    </button>
+                </div>
+
+                <div class="search-result" ></div>
+            </form>
+            </div>
+
+            <div class="header-actions">
+
+                <button class="icon-btn has-state" aria-label="open search" >
+                    <span class="m-icon icon">search</span>
+                </button>
+
+                <a href="#/current-location" class="btn-primary has-state" >
+                    <span class="m-icon">my_location</span>
+                    <span class="span">Current Location</span>
+                </a>
+
+            </div>
+
+        </div>
+    </header>
+
+
+
     <div class="container">
         <!-- Titolo della pagina -->
         <div class="row">
@@ -20,18 +74,6 @@
                 <h1>Benvenuto nel Meteo App</h1>
             </div>
         </div>
-
-        <!-- Barra di ricerca -->
-        <div class="row">
-            <div class="col-12 col-md-6">
-                <form method="post" asp-action="Index" asp-controller="Meteo">
-                    <div class="input-group">
-                        <input type="text" name="nomeCitta" class="form-control" placeholder="Inserisci il nome della città" />
-                        <button type="submit" class="btn btn-primary">Cerca</button>
-                    </div>
-                </form>
-            </div>
-        </div><br />
 
         <!-- Mostra l'errore se presente -->
         @if (ViewBag.Error != null)
