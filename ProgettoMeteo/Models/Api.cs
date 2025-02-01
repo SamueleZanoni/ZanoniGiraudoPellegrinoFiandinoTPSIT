@@ -14,6 +14,36 @@ namespace ProgettoMeteo.Models
         public readonly string apiKey = "bec2cee97778ae672a64740c7aa3657d";
         public readonly string geminiApi = "AIzaSyB8KPMuCtIvpKl4LEAVUwM7-FAe7BoUGTs";
         UtilityService utilityService = new UtilityService();
+
+        public async Task<List<FiveDayForecast>> OttieniPrevisioni5Giorni(float latitudine, float longitudine)
+        {
+            var client = new HttpClient();
+            var url = $"https://api.openweathermap.org/data/2.5/forecast?lat={latitudine}&lon={longitudine}&appid={apiKey}&units=metric";
+            var response = await client.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            var responseString = await response.Content.ReadAsStringAsync();
+            dynamic data = JsonConvert.DeserializeObject<dynamic>(responseString);
+
+            List<FiveDayForecast> fiveDaysForecast = new List<FiveDayForecast>();
+
+            foreach (var forecast in data.list)
+            {
+                // Estrai i dati desiderati per ogni oggetto in list
+                var fiveDay = new FiveDayForecast
+                {
+                    Date = UnixTimeToDateTime((long)forecast.dt),  // Converti il tempo UNIX in una data leggibile
+                    Temperature = (float)forecast.main.temp,
+                    Icon = forecast.weather[0].icon
+                };
+
+                // Aggiungi l'oggetto alla lista
+                fiveDaysForecast.Add(fiveDay);
+            }
+
+            return fiveDaysForecast;
+        }
+
         public async Task<string> MeteoCorrente(float latitudine, float longitudine)
         {
             var client = new HttpClient();
@@ -67,7 +97,9 @@ namespace ProgettoMeteo.Models
                 SO2 = infoPoll["list"][0]["components"]["so2"],
                 PM2_5 = infoPoll["list"][0]["components"]["pm2_5"],
                 PM10 = infoPoll["list"][0]["components"]["pm10"],
-                NH3 = infoPoll["list"][0]["components"]["nh3"]
+                NH3 = infoPoll["list"][0]["components"]["nh3"],
+
+                fiveDayForecast = (await OttieniPrevisioni5Giorni(latitudine, longitudine)).ToArray()
             };
         }
 
@@ -104,7 +136,7 @@ namespace ProgettoMeteo.Models
         private static string UnixTimeToDateTime(long unixTime)
         {
             var dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTime).DateTime.ToLocalTime();
-            return dateTime.ToString("HH:mm"); // Formato 24 ore
+            return dateTime.ToString("yyyy-MM-dd HH:mm"); // Formato 24 ore
         }
 
         public async Task<string> ApiAi(string testo)

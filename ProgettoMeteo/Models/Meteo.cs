@@ -26,6 +26,7 @@ namespace ProgettoMeteo.Models
         public float PM2_5 { get; set; } // Particulate Matter (PM 2.5)
         public float PM10 { get; set; } // Particulate Matter (PM 10)
         public float NH3 { get; set; }  // Ammonia
+        public FiveDayForecast[] fiveDayForecast { get; set; }
 
         public string ConvertiIcona(string icona)
         {
