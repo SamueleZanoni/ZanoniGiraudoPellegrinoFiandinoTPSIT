@@ -25,7 +25,7 @@ namespace ProgettoMeteo.Models
             var responseString = await response.Content.ReadAsStringAsync();
             dynamic data = JsonConvert.DeserializeObject<dynamic>(responseString);
 
-            List<FiveDayForecast> fiveDaysForecast = new List<FiveDayForecast>();
+            List<FiveDayForecast> fiveDayForecast = new List<FiveDayForecast>();
 
             foreach (var forecast in data.list)
             {
@@ -38,10 +38,10 @@ namespace ProgettoMeteo.Models
                 };
 
                 // Aggiungi l'oggetto alla lista
-                fiveDaysForecast.Add(fiveDay);
+                fiveDayForecast.Add(fiveDay);
             }
 
-            return fiveDaysForecast;
+            return fiveDayForecast;
         }
 
         public async Task<string> MeteoCorrente(float latitudine, float longitudine)
@@ -99,7 +99,7 @@ namespace ProgettoMeteo.Models
                 PM10 = infoPoll["list"][0]["components"]["pm10"],
                 NH3 = infoPoll["list"][0]["components"]["nh3"],
 
-                fiveDayForecast = (await OttieniPrevisioni5Giorni(latitudine, longitudine)).ToArray()
+                FiveDayForecast = (await OttieniPrevisioni5Giorni(latitudine, longitudine))
             };
         }
 
