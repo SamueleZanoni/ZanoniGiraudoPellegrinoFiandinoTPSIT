@@ -59,7 +59,7 @@ namespace ProgettoMeteo.Models
                 WindSpeed = (float)meteoData["wind"]["speed"],
                 Visibility = (float)meteoData["visibility"],
 
-                AQI = utilityService.GetAqiLevel(infoPoll["list"][0]["main"]["aqi"]),
+                AQI = infoPoll["list"][0]["main"]["aqi"],
                 CO = infoPoll["list"][0]["components"]["co"],
                 NO = infoPoll["list"][0]["components"]["no"],
                 NO2 = infoPoll["list"][0]["components"]["no2"],

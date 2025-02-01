@@ -17,7 +17,7 @@ namespace ProgettoMeteo.Models
         public float Visibility { get; set; }
 
         // Nuovi parametri per l'inquinamento
-        public string AQI { get; set; } // Air Quality Index
+        public int AQI { get; set; } // Air Quality Index
         public float CO { get; set; }  // Carbon Monoxide
         public float NO { get; set; }  // Nitric Oxide
         public float NO2 { get; set; } // Nitrogen Dioxide

@@ -1,5 +1,7 @@
-﻿@{
+﻿@using ProgettoMeteo.Services
+@{
     ViewData["Title"] = "weatherio";
+    UtilityService service = new UtilityService();
 }
 
 <!DOCTYPE html>
@@ -197,7 +199,7 @@
                                         </ul>
                                     </div>
 
-                                    <span class="badge aqi-1 label-1" title="aqi message">@Model.AQI</span>
+                                    <span class="badge aqi-1 label-1" title="aqi message">@service.GetAqiLevel(Model.AQI)</span>
                                 </div>
                                 <div class="card card-sm highlight-card tow">
                                     <h3 class="title-2">Sunrise & Sunset</h3>
@@ -630,7 +632,7 @@
                                     </ul>
                                 </div>
 
-                                <span class="badge aqi-1 label-1" title="aqi message">Good</span>
+                                <span class="badge aqi-1 label-1" title="aqi message">AQI</span>
                             </div>
                             <div class="card card-sm highlight-card tow">
                                 <h3 class="title-2">Sunrise & Sunset</h3>
