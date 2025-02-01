@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using static System.Net.Mime.MediaTypeNames;
 using Markdig;
+using ProgettoMeteo.Services;
 
 namespace ProgettoMeteo.Models
 {
@@ -12,7 +13,7 @@ namespace ProgettoMeteo.Models
     {
         public readonly string apiKey = "bec2cee97778ae672a64740c7aa3657d";
         public readonly string geminiApi = "AIzaSyB8KPMuCtIvpKl4LEAVUwM7-FAe7BoUGTs";
-
+        UtilityService utilityService = new UtilityService();
         public async Task<string> MeteoCorrente(float latitudine, float longitudine)
         {
             var client = new HttpClient();
@@ -58,7 +59,7 @@ namespace ProgettoMeteo.Models
                 WindSpeed = (float)meteoData["wind"]["speed"],
                 Visibility = (float)meteoData["visibility"],
 
-                AQI = infoPoll["list"][0]["main"]["aqi"],
+                AQI = utilityService.GetAqiLevel(infoPoll["list"][0]["main"]["aqi"]),
                 CO = infoPoll["list"][0]["components"]["co"],
                 NO = infoPoll["list"][0]["components"]["no"],
                 NO2 = infoPoll["list"][0]["components"]["no2"],

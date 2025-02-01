@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Mvc;
 using ProgettoMeteo.Models;
+using ProgettoMeteo.Services;
 using System.Threading.Tasks;
 
 namespace ProgettoMeteo.Controllers
@@ -8,7 +9,7 @@ namespace ProgettoMeteo.Controllers
     public class MeteoController : Controller
     {
         private readonly Api _apiService;
-
+        
         public MeteoController(Api apiService)
         {
             _apiService = apiService;
