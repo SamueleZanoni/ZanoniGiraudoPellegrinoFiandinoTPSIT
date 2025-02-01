@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.AspNetCore.Mvc;
 using ProgettoMeteo.Models;
 using System.Threading.Tasks;
 
@@ -101,6 +102,17 @@ namespace ProgettoMeteo.Controllers
                 ViewBag.Error = "Errore nel recupero dei dati meteo: " + ex.Message;
                 return View();
             }
+        }
+
+        public IActionResult Mappe()
+        {
+            ViewData["MappaNuvole"] = $"https://tile.openweathermap.org/map/clouds_new/0/0/0.png?appid={_apiService.apiKey}";
+            ViewData["MappaPressione"] = $"https://tile.openweathermap.org/map/pressure_new/0/0/0.png?appid={_apiService.apiKey}";
+            ViewData["MappaVento"] = $"https://tile.openweathermap.org/map/wind_new/0/0/0.png?appid={_apiService.apiKey}";
+            ViewData["MappaTemperatura"] = $"https://tile.openweathermap.org/map/temp_new/0/0/0.png?appid={_apiService.apiKey}";
+            ViewData["MappaPrecipitazioni"] = $"https://tile.openweathermap.org/map/precipitation_new/0/0/0.png?appid={_apiService.apiKey}";
+
+            return View();
         }
     }
 }

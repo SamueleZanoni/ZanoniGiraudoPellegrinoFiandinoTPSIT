@@ -10,7 +10,8 @@ namespace ProgettoMeteo.Models
 {
     public class Api
     {
-        private readonly string apiKey = "bec2cee97778ae672a64740c7aa3657d";
+        public readonly string apiKey = "bec2cee97778ae672a64740c7aa3657d";
+        public readonly string geminiApi = "AIzaSyB8KPMuCtIvpKl4LEAVUwM7-FAe7BoUGTs";
 
         public async Task<string> MeteoCorrente(float latitudine, float longitudine)
         {
@@ -89,7 +90,6 @@ namespace ProgettoMeteo.Models
             return await response.Content.ReadAsStringAsync();
         }
 
-
         public async Task<string> MeteoGeoLocation(string nomeCitta)
         {
             var client = new HttpClient();
@@ -109,7 +109,7 @@ namespace ProgettoMeteo.Models
         public async Task<string> ApiAi(string testo)
         {
             var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyB8KPMuCtIvpKl4LEAVUwM7-FAe7BoUGTs");
+            var request = new HttpRequestMessage(HttpMethod.Post, $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={geminiApi}");
             var content = new StringContent($"{{\r\n    \"contents\": \r\n    [{{\r\n        \"parts\":\r\n            [{{\"text\": \"{testo}.\"}}]\r\n    }}]\r\n}}", System.Text.Encoding.UTF8, "application/json");
             request.Content = content;
             var response = await client.SendAsync(request);
