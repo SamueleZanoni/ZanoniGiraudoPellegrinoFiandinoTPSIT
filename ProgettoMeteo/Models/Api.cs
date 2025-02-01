@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
 using static System.Net.Mime.MediaTypeNames;
+using Markdig;
 
 namespace ProgettoMeteo.Models
 {
@@ -105,6 +106,20 @@ namespace ProgettoMeteo.Models
             return dateTime.ToString("HH:mm"); // Formato 24 ore
         }
 
-        
+        public async Task<string> ApiAi(string testo)
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyB8KPMuCtIvpKl4LEAVUwM7-FAe7BoUGTs");
+            var content = new StringContent($"{{\r\n    \"contents\": \r\n    [{{\r\n        \"parts\":\r\n            [{{\"text\": \"{testo}.\"}}]\r\n    }}]\r\n}}", System.Text.Encoding.UTF8, "application/json");
+            request.Content = content;
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            dynamic data = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+
+            string risTesto = data["candidates"][0]["content"]["parts"][0]["text"].ToString();
+
+            return Markdown.ToHtml(risTesto);
+        }
     }
 }
