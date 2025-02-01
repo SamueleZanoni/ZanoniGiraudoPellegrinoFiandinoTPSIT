@@ -569,7 +569,6 @@ article.container::before {
 
 
 
-
 /*-----------------------------------*\
   #HOURLY FORECAST
 \*-----------------------------------*/
@@ -719,7 +718,7 @@ article.container::before {
   text-align: center;
   gap: 12px 24px;
   margin-block-start: 28px;
-  display: none;
+  /*display: none;*/
 }
 
 .fade-in .footer { display: flex; }
