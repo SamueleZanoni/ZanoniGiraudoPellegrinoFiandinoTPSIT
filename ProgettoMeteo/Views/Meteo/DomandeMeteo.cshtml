@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Domande sul meteo";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div>
+        <form asp-action="PaginaAi" method="post" asp-controller="Meteo">
+            <input type="text" name="citta" placeholder="Inserisci la città" />
+            <input type="text" name="testo" placeholder="Inserisci cosa chiedere" /><br />
+            <button type="submit" class="btn btn-primary">Chiedi</button>
+        </form>
+    </div>
+
+    @if (ViewData["RispostaMeteo"] != null)
+    {
+        <div>
+            @Html.Raw(ViewData["RispostaMeteo"])
+        </div>
+    }
+</body>
+</html>

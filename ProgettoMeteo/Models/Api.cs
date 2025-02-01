@@ -121,5 +121,53 @@ namespace ProgettoMeteo.Models
 
             return Markdown.ToHtml(risTesto);
         }
+
+        //public async Task<string> ApiAi(string testo, string citta)
+        //{
+        //    var client = new HttpClient();
+
+        //    // Ottieni la posizione della città
+        //    var geoResponse = await MeteoGeoLocation(citta);
+        //    var deserializedData = JsonConvert.DeserializeObject<List<Dictionary<string, dynamic>>>(geoResponse);
+        //    float latitudine = (float)deserializedData[0]["lat"];
+        //    float longitudine = (float)deserializedData[0]["lon"];
+
+        //    // Ottieni il meteo per 5 giorni
+        //    var response5Giorni = await Meteo5Giorni(latitudine, longitudine);
+
+        //    // Formatta i dati meteo in una frase leggibile
+        //    string meteoTesto = FormattaDatiMeteo(response5Giorni);
+
+        //    // Prompt più chiaro per Gemini
+        //    string prompt = $"Ti sto fornendo dati meteo reali per {citta}. Devi rispondere SOLO in base a queste informazioni e NON devi dire di consultare un altro servizio. " +
+        //        $"Ecco i dati meteo:\n\n{meteoTesto}\n\n" +
+        //        $"Ora rispondi a questa domanda: {testo}";
+
+        //    // Chiamata API Gemini
+        //    var request = new HttpRequestMessage(HttpMethod.Post, "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyB8KPMuCtIvpKl4LEAVUwM7-FAe7BoUGTs");
+        //    var content = new StringContent($"{{\"contents\": [{{\"parts\":[{{\"text\": \"{prompt}\"}}]}}]}}", System.Text.Encoding.UTF8, "application/json");
+        //    request.Content = content;
+        //    var response = await client.SendAsync(request);
+        //    response.EnsureSuccessStatusCode();
+
+        //    dynamic data = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        //    string risTesto = data["candidates"][0]["content"]["parts"][0]["text"].ToString();
+
+        //    return Markdown.ToHtml(risTesto);
+        //}
+
+        //private string FormattaDatiMeteo(string jsonMeteo)
+        //{
+        //    dynamic meteoData = JsonConvert.DeserializeObject<dynamic>(jsonMeteo);
+
+        //    // Estrarre solo le informazioni importanti
+        //    string descrizione = meteoData["list"][0]["weather"][0]["description"];
+        //    float temperatura = (float)meteoData["list"][0]["main"]["temp"];
+        //    int umidita = (int)meteoData["list"][0]["main"]["humidity"];
+        //    float vento = (float)meteoData["list"][0]["wind"]["speed"];
+        //    float probabilitaPioggia = meteoData["list"][0].ContainsKey("pop") ? (float)meteoData["list"][0]["pop"] * 100 : 0;
+
+        //    return $"Previsione: {descrizione}. Temperatura: {temperatura}°C, Umidità: {umidita}%, Vento: {vento}m/s, Probabilità di pioggia: {probabilitaPioggia}%.";
+        //}
     }
 }

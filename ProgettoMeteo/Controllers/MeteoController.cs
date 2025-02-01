@@ -13,14 +13,44 @@ namespace ProgettoMeteo.Controllers
             _apiService = apiService;
         }
 
-        // GET: /Meteo/Index
+        ////GET: /Meteo/DomandeMeteo
+        //[HttpGet]
+        //public IActionResult DomandeMeteo()
+        //{
+        //    return View();
+        //}
+
+        //// POST: /Meteo/DomandeMeteo
+        //[HttpPost]
+        //public async Task<IActionResult> DomandeMeteo(string citta, string testo)
+        //{
+        //    if (string.IsNullOrEmpty(testo))
+        //    {
+        //        ViewBag.Error = "Inserisci un testo valido.";
+        //        return View();
+        //    }
+        //    try
+        //    {
+        //        var data = await _apiService.ApiAi(testo, citta);
+        //        ViewData["RispostaMeteo"] = data;
+
+        //        return View();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ViewBag.Error = "Errore nel recupero del testo: " + ex.Message;
+        //        return View();
+        //    }
+        //}
+
+        // GET: /Meteo/PaginaAi
         [HttpGet]
         public IActionResult PaginaAi()
         {
             return View();
         }
 
-        // POST: /Meteo/Index
+        // POST: /Meteo/PaginaAi
         [HttpPost]
         public async Task<IActionResult> PaginaAi(string testo)
         {
