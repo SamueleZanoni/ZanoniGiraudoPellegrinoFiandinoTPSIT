@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/style.css" />
     <style type="text/css">
         html, body {
             margin: 0;
@@ -83,6 +84,23 @@
 <body>
     <h1 class="page-title">Mappe</h1>
     <div class="maps-container">
+
+        <div class="card card-lg forecast-card">
+            <ul>
+                
+                <li class="card-item">
+                    <div class="icon-wrapper">
+                        <<img src="@ViewData["MappaNuvole"]" alt="Mappa Nuvole" />
+
+                        <span class="span">
+                            <p class="title-2">Mappa nuvole</p>
+                        </span>
+                    </div>
+ 
+                </li>
+                
+            </ul>
+        </div>
         <div class="map-card">
             <div class="map-title">Nuvole</div>
             <div class="map-image">

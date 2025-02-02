@@ -113,6 +113,8 @@ namespace ProgettoMeteo.Controllers
         }
         public IActionResult Mappe()
         {
+
+
             ViewData["MappaNuvole"] = $"https://tile.openweathermap.org/map/clouds_new/0/0/0.png?appid={_apiService.apiKey}";
             ViewData["MappaPressione"] = $"https://tile.openweathermap.org/map/pressure_new/0/0/0.png?appid={_apiService.apiKey}";
             ViewData["MappaVento"] = $"https://tile.openweathermap.org/map/wind_new/0/0/0.png?appid={_apiService.apiKey}";

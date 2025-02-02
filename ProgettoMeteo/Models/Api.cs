@@ -65,7 +65,6 @@ namespace ProgettoMeteo.Models
             }
         }
 
-
         public async Task<List<FiveDayForecast>> OttieniPrevisioni5Giorni(float latitudine, float longitudine)
         {
             var client = new HttpClient();
@@ -90,7 +89,7 @@ namespace ProgettoMeteo.Models
                     var fiveDay = new FiveDayForecast
                     {
                         Date = UnixTimeToDateTime((long)forecast.dt),  // Converti il tempo UNIX in una data leggibile
-                        Temperature = (float)forecast.main.temp,
+                        Temperature = (float)Math.Round((float)forecast.main.temp,0),
                         Icon = forecast.weather[0].icon,
                         Description = forecast.weather[0].description,
                         Dt = dt,        // Aggiunge il timestamp
@@ -134,7 +133,7 @@ namespace ProgettoMeteo.Models
                     var daily = new DailyForecast
                     {
                         Date = UnixTimeToDateTime((long)forecast.dt),
-                        MaxTemperature = (float)forecast.main.temp,
+                        MaxTemperature = (float)Math.Round((float)forecast.main.temp, 0),
                         Icon = forecast.weather[0].icon,
                         Description = forecast.weather[0].description,
                         Dt = (long)forecast.dt,
@@ -188,8 +187,8 @@ namespace ProgettoMeteo.Models
             {
                 Location = $"{meteoData["name"]}, {meteoData["sys"]["country"]}",
                 Description = meteoData["weather"][0]["description"],
-                Temperature = (float)meteoData["main"]["temp"],
-                FeelsLike = (float)meteoData["main"]["feels_like"],
+                Temperature = (float)Math.Round((float)meteoData["main"]["temp"], 0),
+                FeelsLike = (float)Math.Round((float)meteoData["main"]["feels_like"]),
                 Humidity = (int)meteoData["main"]["humidity"],
                 Pressure = (int)meteoData["main"]["pressure"],
                 Icon = meteoData["weather"][0]["icon"],
@@ -216,15 +215,6 @@ namespace ProgettoMeteo.Models
             };
         }
 
-        public async Task<string> Meteo5Giorni(float latitudine, float longitudine)
-        {
-            var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Get, $"api.openweathermap.org/data/2.5/forecast?lat={latitudine}&lon={longitudine}&appid={apiKey}");
-            var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-
-            return await response.Content.ReadAsStringAsync();
-        }
 
         public async Task<string> MeteoInquinamento(float latitudine, float longitudine)
         {

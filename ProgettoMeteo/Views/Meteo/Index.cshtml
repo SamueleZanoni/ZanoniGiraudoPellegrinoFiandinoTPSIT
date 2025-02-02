@@ -37,10 +37,9 @@
             <form method="post" asp-action="Index" asp-controller="Meteo">
                 <div class="search-wrapper">
                     <input type="text" name="nomeCitta" class="search-field" placeholder="Inserisci il nome della città" autocomplete="off" />
-                    <button type="submit" ><span class="m-icon leading-icon">search</span></button>                       
-                    <button class="icon-btn leading-icon has-state" aria-label="close search">
-                        <span class="m-icon">arrow_back</span>
-                    </button>
+                    <button type="submit" ><span class="m-icon leading-icon">search</span></button> 
+                    
+                    
                 </div>
 
                 <div class="search-result"></div>
@@ -49,10 +48,6 @@
             </div>
 
             <div class="header-actions">
-
-                <button class="icon-btn has-state" aria-label="open search" >
-                    <span class="m-icon icon">search</span>
-                </button>
                 <a class="btn-primary has-state" asp-area="" asp-controller="Meteo" asp-action="Mappe"><span class="m-icon">map</span><span class="span">Mappe</span></a>
                 <a class="btn-primary has-state" asp-area="" asp-controller="Meteo" asp-action="PaginaAi"><span class="m-icon">robot</span><span class="span">Ai</span></a>
                 <a href="#/current-location" class="btn-primary has-state" >
