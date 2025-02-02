@@ -44,6 +44,10 @@ namespace ProgettoMeteo.Models
                     // Se vuoi essere più specifico, potresti anche aggiungere un controllo sul paese
                     string country = data[0].country.ToString();
                 }
+                else
+                {
+                    cityName = "Londra";
+                }
 
                 if (string.IsNullOrEmpty(cityName))
                 {
