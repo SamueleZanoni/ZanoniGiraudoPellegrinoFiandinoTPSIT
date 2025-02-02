@@ -84,19 +84,26 @@ namespace ProgettoMeteo.Controllers
 
         // POST: /Meteo/Index
         [HttpPost]
-        public async Task<IActionResult> Index(string nomeCitta)
+        public async Task<IActionResult> Index(string? nomeCitta, float? latitudine, float? longitudine)
         {
-            if (string.IsNullOrEmpty(nomeCitta))
-            {
-                ViewBag.Error = "Inserisci una città valida.";
-                return View();
-            }
-
             try
             {
-                var meteoData = await _apiService.OttieniMeteoPerCitta(nomeCitta);
+                if (latitudine.HasValue && longitudine.HasValue)
+                {
+                    var meteo = await _apiService.ReverseGeocoding(latitudine.Value, longitudine.Value);
 
-                return View(meteoData);
+                    return View(meteo);
+                }
+                else if (!string.IsNullOrEmpty(nomeCitta))
+                {
+                    var meteoData = await _apiService.OttieniMeteoPerCitta(nomeCitta);
+                    return View(meteoData);
+                }
+                else
+                {
+                    ViewBag.Error = "Inserisci una città valida o permetti l'accesso alla tua posizione.";
+                    return View();
+                }
             }
             catch (Exception ex)
             {
@@ -104,7 +111,6 @@ namespace ProgettoMeteo.Controllers
                 return View();
             }
         }
-
         public IActionResult Mappe()
         {
             ViewData["MappaNuvole"] = $"https://tile.openweathermap.org/map/clouds_new/0/0/0.png?appid={_apiService.apiKey}";

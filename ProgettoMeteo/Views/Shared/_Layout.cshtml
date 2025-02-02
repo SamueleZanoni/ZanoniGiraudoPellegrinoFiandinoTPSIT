@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ProgettoMeteo</title>
     <link rel="icon" type="image/x-icon" href="favicon.svg">
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!---->
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
 
 </head>
 <body>
+    <!-- 
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -43,28 +44,17 @@
             </div>
         </nav>
     </header>
+    -->
 
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    @RenderBody()
 
-    <footer class="footer">
-        <p class="body-3">
-            Copyright 2025. All Rights Reserved.
-        </p>
 
-        <p class="body-3">
-            Powered By <a href="https://openweathermap.org/api" title="Free OpenWeather Api" target="_blank"
-                          rel="noopener">
-                <img src="~/images/openweather.png" width="150" height="30" loading="lazy"
-                     alt="OpenWeather">
-            </a>
-        </p>
-    </footer>
-    
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    
 </body>
+
 </html>

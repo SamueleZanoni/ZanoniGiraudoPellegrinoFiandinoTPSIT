@@ -15,6 +15,57 @@ namespace ProgettoMeteo.Models
         public readonly string geminiApi = "AIzaSyB8KPMuCtIvpKl4LEAVUwM7-FAe7BoUGTs";
         UtilityService utilityService = new UtilityService();
 
+        public async Task<Meteo> ReverseGeocoding(float latitudine, float longitudine)
+        {
+            var client = new HttpClient();
+            var url = $"http://api.openweathermap.org/geo/1.0/reverse?lat={latitudine}&lon={longitudine}&limit=6&appid={apiKey}";
+
+            try
+            {
+                var response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+
+                var responseString = await response.Content.ReadAsStringAsync();
+                dynamic data = JsonConvert.DeserializeObject<dynamic>(responseString);
+
+                // Verifica se ci sono risultati
+                if (data == null || data.Count == 0)
+                {
+                    throw new Exception("Località non trovata.");
+                }
+
+                // Estrai il nome della città (usiamo la prima città trovata)
+                string cityName = string.Empty;
+                if (data.Count > 0)
+                {
+                    // Puoi scegliere la città che ti interessa (e.g., la prima della lista, la più rilevante, etc.)
+                    cityName = data[0].name.ToString();
+
+                    // Se vuoi essere più specifico, potresti anche aggiungere un controllo sul paese
+                    string country = data[0].country.ToString();
+                }
+
+                if (string.IsNullOrEmpty(cityName))
+                {
+                    throw new Exception("Città non trovata o non è nel paese desiderato.");
+                }
+
+                Console.WriteLine(cityName);
+                return await OttieniMeteoPerCitta(cityName);
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"Errore nella richiesta HTTP: {e.Message}");
+                throw new Exception("Errore di connessione al servizio OpenWeather.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Errore: {e.Message}");
+                throw;
+            }
+        }
+
+
         public async Task<List<FiveDayForecast>> OttieniPrevisioni5Giorni(float latitudine, float longitudine)
         {
             var client = new HttpClient();
