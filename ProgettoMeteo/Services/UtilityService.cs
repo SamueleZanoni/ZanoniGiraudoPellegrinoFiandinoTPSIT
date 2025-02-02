@@ -15,6 +15,7 @@ namespace ProgettoMeteo.Services
             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
         };
 
+
         public string GetDate(long dateUnix, int timezoneOffset)
         {
             var date = DateTimeOffset.FromUnixTimeSeconds(dateUnix + timezoneOffset).UtcDateTime;
@@ -22,6 +23,16 @@ namespace ProgettoMeteo.Services
             string monthName = MonthNames[date.Month - 1];
 
             return $"{weekDayName} {date.Day}, {monthName}";
+        }
+
+        public (string WeekDay, string DateAndMonth) GetDateParts(long dateUnix, int timezoneOffset)
+        {
+            var date = DateTimeOffset.FromUnixTimeSeconds(dateUnix + timezoneOffset).UtcDateTime;
+            string weekDayName = WeekDayNames[(int)date.DayOfWeek];
+            string monthName = MonthNames[date.Month - 1];
+            string dayMonth = $"{date.Day} {monthName}";
+
+            return (weekDayName, dayMonth);
         }
 
         public string GetTime(long timeUnix, int timezoneOffset)
@@ -52,11 +63,11 @@ namespace ProgettoMeteo.Services
         {
             return aqi switch
             {
-                1 => "Good: Air quality is considered satisfactory, and air pollution poses little or no risk.",
-                2 => "Fair: Air quality is acceptable; however, for some pollutants there may be a moderate health concern for sensitive people.",
-                3 => "Moderate: Sensitive groups may experience health effects. The general public is unlikely to be affected.",
-                4 => "Poor: Everyone may begin to experience health effects; sensitive groups may experience more serious effects.",
-                5 => "Very Poor: Emergency conditions with serious risks for the entire population.",
+                1 => "Good",
+                2 => "Fair",
+                3 => "Moderate",
+                4 => "Poor",
+                5 => "Very Poor",
                 _ => "Unknown AQI level"
             };
         }

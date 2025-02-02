@@ -27,23 +27,81 @@ namespace ProgettoMeteo.Models
 
             List<FiveDayForecast> fiveDayForecast = new List<FiveDayForecast>();
 
+            int timezone = (int)data.city.timezone;
+
             foreach (var forecast in data.list)
             {
-                // Estrai i dati desiderati per ogni oggetto in list
-                var fiveDay = new FiveDayForecast
+                string forecastTime = (string)forecast.dt_txt;
+                if (forecastTime.Contains("12:00:00"))
                 {
-                    Date = UnixTimeToDateTime((long)forecast.dt),  // Converti il tempo UNIX in una data leggibile
-                    Temperature = (float)forecast.main.temp,
-                    Icon = forecast.weather[0].icon
-                };
+                    long dt = (long)forecast.dt;
+                    // Estrai i dati desiderati per ogni oggetto in list
+                    var fiveDay = new FiveDayForecast
+                    {
+                        Date = UnixTimeToDateTime((long)forecast.dt),  // Converti il tempo UNIX in una data leggibile
+                        Temperature = (float)forecast.main.temp,
+                        Icon = forecast.weather[0].icon,
+                        Description = forecast.weather[0].description,
+                        Dt = dt,        // Aggiunge il timestamp
+                        Timezone = timezone           // Aggiunge il fuso orario estratto dall'oggetto "city"
+                    };
 
-                // Aggiungi l'oggetto alla lista
-                fiveDayForecast.Add(fiveDay);
+                    // Aggiungi l'oggetto alla lista
+                    fiveDayForecast.Add(fiveDay);
+                }
+                
             }
 
             return fiveDayForecast;
         }
 
+        public async Task<List<DailyForecast>> OttieniPrevisioniOrarie(float latitudine, float longitudine)
+        {
+            var client = new HttpClient();
+            var url = $"https://api.openweathermap.org/data/2.5/forecast?lat={latitudine}&lon={longitudine}&appid={apiKey}&units=metric";
+            var response = await client.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            var responseString = await response.Content.ReadAsStringAsync();
+            dynamic data = JsonConvert.DeserializeObject<dynamic>(responseString);
+
+            List<DailyForecast> dailyForecast = new List<DailyForecast>();
+
+            int timezone = (int)data.city.timezone;
+
+            DateTime oggi = DateTime.UtcNow.AddSeconds(timezone).Date;
+            DateTime domani = oggi.AddDays(1);
+
+            foreach (var forecast in data.list)
+            {
+                DateTime forecastDateTime = DateTime.Parse(UnixTimeToDateTime((long)forecast.dt));
+                long dt = (long)forecast.dt;
+                // Estrai i dati desiderati per ogni oggetto in list
+
+                if (forecastDateTime.Date == oggi || (dailyForecast.Count < 8 && forecastDateTime.Date == domani))
+                {
+                    var daily = new DailyForecast
+                    {
+                        Date = UnixTimeToDateTime((long)forecast.dt),
+                        MaxTemperature = (float)forecast.main.temp,
+                        Icon = forecast.weather[0].icon,
+                        Description = forecast.weather[0].description,
+                        Dt = (long)forecast.dt,
+                        Timezone = timezone,
+                        Speed = (int)Math.Ceiling((float)forecast.wind.speed),
+                        Direction = (int)forecast.wind.deg
+                    };
+
+                    dailyForecast.Add(daily);
+
+                    // Fermati appena hai 8 previsioni
+                    if (dailyForecast.Count == 8) break;
+                }
+
+            }
+
+            return dailyForecast;
+        }
         public async Task<string> MeteoCorrente(float latitudine, float longitudine)
         {
             var client = new HttpClient();
@@ -84,10 +142,13 @@ namespace ProgettoMeteo.Models
                 Humidity = (int)meteoData["main"]["humidity"],
                 Pressure = (int)meteoData["main"]["pressure"],
                 Icon = meteoData["weather"][0]["icon"],
-                Sunrise = UnixTimeToDateTime((long)meteoData["sys"]["sunrise"]),
-                Sunset = UnixTimeToDateTime((long)meteoData["sys"]["sunset"]),
+                Sunrise = (long)meteoData["sys"]["sunrise"],
+                Sunset = (long)meteoData["sys"]["sunset"],
                 WindSpeed = (float)meteoData["wind"]["speed"],
-                Visibility = (float)meteoData["visibility"],
+                Visibility = (float)(meteoData["visibility"]/1000),
+
+                Dt = (long)meteoData["dt"],
+                Timezone = (int)meteoData["timezone"],
 
                 AQI = infoPoll["list"][0]["main"]["aqi"],
                 CO = infoPoll["list"][0]["components"]["co"],
@@ -99,7 +160,8 @@ namespace ProgettoMeteo.Models
                 PM10 = infoPoll["list"][0]["components"]["pm10"],
                 NH3 = infoPoll["list"][0]["components"]["nh3"],
 
-                FiveDayForecast = (await OttieniPrevisioni5Giorni(latitudine, longitudine))
+                FiveDayForecast = (await OttieniPrevisioni5Giorni(latitudine, longitudine)),
+                DailyForecast = (await OttieniPrevisioniOrarie(latitudine, longitudine))
             };
         }
 

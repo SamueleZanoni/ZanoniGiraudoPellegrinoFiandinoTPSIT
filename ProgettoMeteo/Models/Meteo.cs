@@ -11,8 +11,8 @@ namespace ProgettoMeteo.Models
         public int Humidity { get; set; }
         public int Pressure { get; set; }
         public string Icon { get; set; }
-        public string Sunrise { get; set; }
-        public string Sunset { get; set; }
+        public long Sunrise { get; set; }
+        public long Sunset { get; set; }
         public float WindSpeed { get; set; }
         public float Visibility { get; set; }
 
@@ -26,7 +26,10 @@ namespace ProgettoMeteo.Models
         public float PM2_5 { get; set; } // Particulate Matter (PM 2.5)
         public float PM10 { get; set; } // Particulate Matter (PM 10)
         public float NH3 { get; set; }  // Ammonia
+        public int Timezone {  get; set; }
+        public long Dt {  get; set; }
         public List<FiveDayForecast> FiveDayForecast { get; set; }
+        public List<DailyForecast> DailyForecast { get; set; }
 
         public string ConvertiIcona(string icona)
         {
