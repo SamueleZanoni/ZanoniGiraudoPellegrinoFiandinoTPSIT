@@ -11,18 +11,31 @@
     <link rel="stylesheet" href="~/css/styleai.css" />
 </head>
 <body>
-    <div>
-        <form asp-action="PaginaAi" method="post" asp-controller="Meteo">
-            <input type="text" name="testo" placeholder="Inserisci cosa chiedere" />
+    <div class="container">
+        <header>
+            <h1>Chiedi alla nostra AI!</h1>
+            <p>Inserisci una domanda e scopri la risposta dell'intelligenza artificiale.</p>
+        </header>
+        <br />
+        <form asp-action="PaginaAi" method="post" asp-controller="Meteo" class="ai-form">
+            <input type="text" name="testo" placeholder="Scrivi qui..." aria-label="Scrivi la tua domanda" required />
+            <br />
             <button type="submit" class="btn btn-primary">Chiedi</button>
         </form>
+        
+        @if (ViewData["Risposta"] != null)
+        {
+            <div class="ai-response">
+                <h2>Risposta dell'IA:</h2>
+                <div class="response-content">
+                    @Html.Raw(ViewData["Risposta"])
+                </div>
+            </div>
+        }
     </div>
-
-    @if (ViewData["Risposta"] != null)
-    {
-        <div>
-            @Html.Raw(ViewData["Risposta"])
-        </div>
-    }
+    <a class="btn-primary has-state" asp-area="" asp-controller="Meteo" asp-action="Index">
+        <span class="m-icon">home</span>
+        <span class="span">Home</span>
+    </a>
 </body>
 </html>
