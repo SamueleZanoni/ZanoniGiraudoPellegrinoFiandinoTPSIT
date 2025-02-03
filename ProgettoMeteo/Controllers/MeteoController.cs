@@ -83,13 +83,13 @@ namespace ProgettoMeteo.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(string? nomeCitta, float? latitudine, float? longitudine)
+        public async Task<IActionResult> Index(string? nomeCitta, float? lat, float? lon)
         {
             try
             {
-                if (latitudine.HasValue && longitudine.HasValue)
+                if (lat.HasValue && lon.HasValue)
                 {
-                    var meteo = await _apiService.ReverseGeocoding(latitudine.Value, longitudine.Value);
+                    var meteo = await _apiService.ReverseGeocoding(lat.Value, lon.Value);
                     return RedirectToAction("Index", "Meteo", new { nomeCitta = meteo.Location });
                 }
                 else if (!string.IsNullOrEmpty(nomeCitta))

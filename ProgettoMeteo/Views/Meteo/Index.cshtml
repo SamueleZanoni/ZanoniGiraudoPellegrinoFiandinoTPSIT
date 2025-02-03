@@ -23,6 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="~/css/style.css" />
+    <script src="~/js/geolocation.js"></script>
 
 </head>
 <body>
@@ -34,7 +35,7 @@
             </a>
 
             <div class="search-view" data-search-view>
-            <form method="post" asp-action="Index" asp-controller="Meteo">
+            <form method="post" asp-action="Index" asp-controller="Meteo" id="">
                 <div class="search-wrapper">
                     <input type="text" name="nomeCitta" class="search-field" placeholder="Inserisci il nome della città" autocomplete="off" />
                     <button type="submit" ><span class="m-icon leading-icon">search</span></button>                  
@@ -45,76 +46,39 @@
 
             </div>
 
+                
+
             <div class="header-actions">
                 <button class="icon-btn has-state" aria-label="open search">
                     <span class="m-icon icon">search</span>
                 </button>
 
-                <a class="btn-primary has-state" asp-area="" asp-controller="Meteo" asp-action="Mappe"><span class="m-icon">map</span><span class="span">Mappe</span></a>
-                <a class="btn-primary has-state" asp-area="" asp-controller="Meteo" asp-action="PaginaAi"><span class="m-icon">robot</span><span class="span">Ai</span></a>
-                <a href="#/current-location" class="btn-primary has-state" >
-                    <span class="m-icon">my_location</span>
-                    <span class="span">Current Location</span>
+                <a class="btn-primary has-state" asp-area="" asp-controller="Meteo" asp-action="Mappe">
+                    <span class="m-icon">map</span>
+                    <span class="span">Mappe</span>
                 </a>
+                <a class="btn-primary has-state" asp-area="" asp-controller="Meteo" asp-action="PaginaAi">
+                    <span class="m-icon">robot</span>
+                    <span class="span">Ai</span>
+                </a>
+
+                <!-- Moved form here -->
+                <form id="locationForm" method="post" asp-action="Index" asp-controller="Meteo">
+                    <input type="hidden" id="lat" name="lat" />
+                    <input type="hidden" id="lon" name="lon" />
+
+                    <a href="#/current-location" id="currentLocationBtn" class="btn-primary has-state">
+                        <span class="m-icon">my_location</span>
+                        <span class="span">Current Location</span>
+                    </a>
+                    <div id="statusMessage" style="color: red;"></div>
+                </form>
             </div>
 
         </div>
     </header>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentLocationBtn = document.querySelector('a[href="#/current-location"]');
-
-            currentLocationBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                if ("geolocation" in navigator) {
-                    // Show loading state
-                    currentLocationBtn.classList.add('loading');
-
-                    navigator.geolocation.getCurrentPosition(async function(position) {
-                        const lat = position.coords.latitude;
-                        const lon = position.coords.longitude;
-
-                        try {
-                            // Use OpenWeatherMap's reverse geocoding API to get city name
-                            const response = await fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=bec2cee97778ae672a64740c7aa3657d`);
-                            const data = await response.json();
-
-                            if (data && data.length > 0) {
-                                const cityName = data[0].name;
-
-                                // Create and submit a form programmatically
-                                const form = document.createElement('form');
-                                form.method = 'POST';
-                                form.action = '/Meteo/Index';
-
-                                const input = document.createElement('input');
-                                input.type = 'hidden';
-                                input.name = 'nomeCitta';
-                                input.value = cityName;
-
-                                form.appendChild(input);
-                                document.body.appendChild(form);
-                                form.submit();
-                            }
-                        } catch (error) {
-                            console.error('Error getting location:', error);
-                            alert('Unable to get your location. Please try again or enter city manually.');
-                        } finally {
-                            currentLocationBtn.classList.remove('loading');
-                        }
-                    }, function(error) {
-                        console.error('Geolocation error:', error);
-                        alert('Unable to get your location. Please make sure location services are enabled.');
-                        currentLocationBtn.classList.remove('loading');
-                    });
-                } else {
-                    alert('Geolocation is not supported by your browser');
-                }
-            });
-        });
-    </script>
+    
 
 
     @if(Model!=null){
