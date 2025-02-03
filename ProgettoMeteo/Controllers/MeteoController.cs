@@ -45,44 +45,43 @@ namespace ProgettoMeteo.Controllers
         //    }
         //}
 
-        // GET: /Meteo/PaginaAi
-        [HttpGet]
-        public IActionResult PaginaAi()
-        {
-            return View();
-        }
-
-        // POST: /Meteo/PaginaAi
         [HttpPost]
         public async Task<IActionResult> PaginaAi(string testo)
         {
             if (string.IsNullOrEmpty(testo))
             {
-                ViewBag.Error = "Inserisci un testo valido.";
-                return View();
+                TempData["Error"] = "Inserisci un testo valido.";
+                return RedirectToAction(nameof(PaginaAi));
             }
             try
             {
                 var data = await _apiService.ApiAi(testo);
-                ViewData["Risposta"] = data;
-
-                return View();
+                TempData["Risposta"] = data;
+                return RedirectToAction(nameof(PaginaAi));
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Errore nel recupero del testo: " + ex.Message;
-                return View();
+                TempData["Error"] = "Errore nel recupero del testo: " + ex.Message;
+                return RedirectToAction(nameof(PaginaAi));
             }
         }
 
-        // GET: /Meteo/Index
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult PaginaAi()
         {
+            if (TempData["Error"] != null)
+            {
+                ViewBag.Error = TempData["Error"];
+            }
+
+            if (TempData["Risposta"] != null)
+            {
+                ViewData["Risposta"] = TempData["Risposta"];
+            }
+
             return View();
         }
 
-        // POST: /Meteo/Index
         [HttpPost]
         public async Task<IActionResult> Index(string? nomeCitta, float? latitudine, float? longitudine)
         {
@@ -91,30 +90,46 @@ namespace ProgettoMeteo.Controllers
                 if (latitudine.HasValue && longitudine.HasValue)
                 {
                     var meteo = await _apiService.ReverseGeocoding(latitudine.Value, longitudine.Value);
-
-                    return View(meteo);
+                    return RedirectToAction("Index", "Meteo", new { nomeCitta = meteo.Location });
                 }
                 else if (!string.IsNullOrEmpty(nomeCitta))
                 {
                     var meteoData = await _apiService.OttieniMeteoPerCitta(nomeCitta);
-                    return View(meteoData);
+                    return RedirectToAction("Index", "Meteo", new { nomeCitta = nomeCitta });
                 }
                 else
                 {
-                    ViewBag.Error = "Inserisci una città valida o permetti l'accesso alla tua posizione.";
-                    return View();
+                    TempData["Error"] = "Inserisci una città valida o permetti l'accesso alla tua posizione.";
+                    return RedirectToAction("Index");
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Errore nel recupero dei dati meteo: " + ex.Message;
-                return View();
+                TempData["Error"] = "Errore nel recupero dei dati meteo: " + ex.Message;
+                return RedirectToAction("Index");
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> IndexAsync(string? nomeCitta)
+        {
+            if (!string.IsNullOrEmpty(nomeCitta))
+            {
+                // Qui puoi recuperare nuovamente i dati meteo se necessario
+                var meteoData = await _apiService.OttieniMeteoPerCitta(nomeCitta);
+                return View(meteoData);
+            }
+
+            // Gestisci l'eventuale messaggio di errore
+            if (TempData["Error"] != null)
+            {
+                ViewBag.Error = TempData["Error"];
+            }
+
+            return View();
         }
         public IActionResult Mappe()
         {
-
-
             ViewData["MappaNuvole"] = $"https://tile.openweathermap.org/map/clouds_new/0/0/0.png?appid={_apiService.apiKey}";
             ViewData["MappaPressione"] = $"https://tile.openweathermap.org/map/pressure_new/0/0/0.png?appid={_apiService.apiKey}";
             ViewData["MappaVento"] = $"https://tile.openweathermap.org/map/wind_new/0/0/0.png?appid={_apiService.apiKey}";
