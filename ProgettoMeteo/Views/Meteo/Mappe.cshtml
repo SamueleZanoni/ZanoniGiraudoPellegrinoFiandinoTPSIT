@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="~/css/stylemappe.css" />
     <style type="text/css">
         html, body {
             margin: 0;
@@ -23,7 +23,7 @@
         }
 
         .page-title {
-            color: #2c3e50;
+            color: #fff;
             margin-bottom: 30px;
             font-size: 2.5em;
             text-align: center;
@@ -46,7 +46,7 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 15px;
-            background-color: #fff;
+            background-color: #222;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
@@ -58,7 +58,7 @@
             font-weight: bold;
             margin-bottom: 10px;
             text-align: center;
-            color: #333;
+            color: #fff;
         }
 
         .map-image {
@@ -73,7 +73,7 @@
                 height: auto;
                 display: block;
             }
-
+            
         /* Sovrascrive eventuali stili che potrebbero interferire */
         main {
             height: auto !important;
@@ -82,10 +82,19 @@
     </style>
 </head>
 <body>
-    <h1 class="page-title">Mappe</h1>
-    <div class="maps-container">
+    <header class="header">
+        <div class="container">
+            <h1 class="page-title">Mappe</h1>
+            <a class="btn-primary has-state" asp-area="" asp-controller="Meteo" asp-action="Index">
+                <span class="m-icon">home</span>
+                <span class="span">Home</span>
+            </a>
+        </div>
+    </header>
 
-        <div class="card card-lg forecast-card">
+    <div class="maps-container">
+      
+        <!--<div class="card card-lg forecast-card">
             <ul>
                 
                 <li class="card-item">
@@ -100,7 +109,7 @@
                 </li>
                 
             </ul>
-        </div>
+        </div>-->
         <div class="map-card">
             <div class="map-title">Nuvole</div>
             <div class="map-image">

@@ -1,0 +1,130 @@
+﻿/* Stile per la pagina Mappe adattato dal tema originale */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: var(--ff-nunito-sans);
+    background-color: var(--background);
+    color: var(--on-background);
+    overflow-y: auto !important;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.page-title {
+    color: var(--on-background);
+    font-size: var(--heading);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.maps-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    flex: 1;
+    overflow: visible !important;
+}
+
+.map-card {
+    width: 300px;
+    background-color: var(--surface);
+    color: var(--on-surface);
+    border-radius: var(--radius-16);
+    padding: 15px;
+    box-shadow: var(--shadow-1);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    transition: var(--transition-short);
+}
+
+    .map-card:hover {
+        box-shadow: var(--shadow-2);
+    }
+
+.map-title {
+    font-size: var(--title-2);
+    font-weight: var(--weight-semiBold);
+    margin-bottom: 10px;
+}
+
+.map-image {
+    width: 100%;
+    border-radius: var(--radius-16);
+    overflow: hidden;
+}
+
+    .map-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: var(--radius-16);
+    }
+
+.card {
+    background-color: var(--surface);
+    color: var(--on-surface);
+    border-radius: var(--radius-16);
+    padding: 16px;
+    box-shadow: var(--shadow-1);
+}
+
+.card-lg {
+    border-radius: var(--radius-28);
+    padding: 20px;
+}
+
+.card-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+    .icon-wrapper img {
+        width: 50px;
+        height: 50px;
+        border-radius: var(--radius-circle);
+    }
+
+.title-2 {
+    font-size: var(--title-2);
+    font-weight: var(--weight-semiBold);
+}
+
+main {
+    height: auto !important;
+    overflow: visible !important;
+}
+
+/* Stile per il pulsante Home */
+.home-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: var(--primary);
+    color: var(--on-primary);
+    padding: 10px 20px;
+    border-radius: var(--radius-pill);
+    font-size: var(--title-2);
+    font-weight: var(--weight-semiBold);
+    transition: var(--transition-short);
+    box-shadow: var(--shadow-1);
+}
