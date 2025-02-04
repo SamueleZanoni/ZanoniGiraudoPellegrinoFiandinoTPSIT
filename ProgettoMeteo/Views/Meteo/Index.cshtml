@@ -1,1 +1,296 @@
-﻿
+﻿@using ProgettoMeteo.Services
+@{
+    ViewData["Title"] = "weatherio";
+    UtilityService service = new UtilityService();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    <meta name="title" content="weatherio">
+
+    <meta name="description" content="weatherio is a weather app made by us">
+
+    <link rel="shortcut icon" href="~/favicon.svg" type="image/svg+xml">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/css/style.css" />
+    <script src="~/js/geolocation.js"></script>
+
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+
+            <a href="#" class="logo">
+                <img src="~/images/logo.png" width="364" height="58" alt="logo">
+            </a>
+
+            <div class="search-view" data-search-view>
+            <form method="post" asp-action="Index" asp-controller="Meteo" id="">
+                <div class="search-wrapper">
+                    <input type="text" name="nomeCitta" class="search-field" placeholder="Inserisci il nome della città" autocomplete="off" />
+                    <button type="submit" ><span class="m-icon leading-icon">search</span></button>                  
+                </div>
+
+                <div class="search-result"></div>
+            </form>
+
+            </div>
+
+                
+
+            <div class="header-actions">
+                <button class="icon-btn has-state" aria-label="open search">
+                    <span class="m-icon icon">search</span>
+                </button>
+
+                <a class="btn-primary has-state" asp-area="" asp-controller="Meteo" asp-action="Mappe">
+                    <span class="m-icon">map</span>
+                    <span class="span">Mappe</span>
+                </a>
+                <a class="btn-primary has-state" asp-area="" asp-controller="Meteo" asp-action="PaginaAi">
+                    <span class="m-icon">robot</span>
+                    <span class="span">Ai</span>
+                </a>
+
+                <!-- Moved form here -->
+                <form id="locationForm" method="post" asp-action="Index" asp-controller="Meteo">
+                    <input type="hidden" id="lat" name="lat" />
+                    <input type="hidden" id="lon" name="lon" />
+
+                    <a href="#/current-location" id="currentLocationBtn" class="btn-primary has-state">
+                        <span class="m-icon">my_location</span>
+                        <span class="span">Current Location</span>
+                    </a>
+                    <div id="statusMessage" style="color: red;"></div>
+                </form>
+            </div>
+
+        </div>
+    </header>
+    
+    
+
+
+    @if(Model!=null){
+        <main>
+            <article class="container">
+                <div class="content-left">
+                    <section class="section current-weather" aria-label="current-weather" data-current-weather>
+                        <div class="card card-lg current-weather-card">
+                            <h2 class="title-2 card-title">Ora</h2>
+                            <div class="wrapper">
+                                <p class="heading">@Model.Temperature&deg; <sup>c</sup></p>
+                                <img src="@Url.Content(Model.ConvertiIcona(Model.Icon))" width="64" height="64"
+                                     alt=@Model.Description class="weather-icon">
+                            </div>
+
+                            <p class="body-3">@Model.Description</p>
+                            <ul class="meta-list">
+                                <li class="meta-item">
+                                    <span class="m-icon">calendar_today</span>
+                                    <p class="title-3 meta-text">@service.GetDate(Model.Dt, Model.Timezone)</p>
+                                </li>
+                                <li class="meta-item">
+                                    <span class="m-icon">location_on</span>
+                                    <p class="title-3 meta-text">@Model.Location</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section class="section-forecast" aria-labelledby="forecast-label" data-5-day-forecast>
+                        <h2 class="title-2" id="forecast-label"> 5 days Forecast</h2>
+
+                        <div class="card card-lg forecast-card">
+                            <ul>
+                                @foreach(var forecast in Model.FiveDayForecast){
+                                    <li class="card-item">
+                                        <div class="icon-wrapper">
+                                            <img src="@Url.Content(Model.ConvertiIcona(forecast.Icon))" width="36" height="36"
+                                                 alt="@forecast.Description" class="weather-icon">
+
+                                            <span class="span">
+                                                <p class="title-2">@forecast.Temperature°</p>
+                                            </span>
+                                        </div>
+                                        @{
+                                            var dateParts = service.GetDateParts((long)forecast.Dt, (int)forecast.Timezone);
+                                        }
+                                        <p class="label-1">@dateParts.DateAndMonth</p>
+                                        <p class="label-1">@dateParts.WeekDay</p>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="content-right">
+                    <section class="section highlights" aria-labelledby="highlights-label" data-highlights>
+                        <div class="card card-lg">
+                            <h2 class="title-2" id="highlights-label">Todays highlights</h2>
+                            <div class="highlight-list">
+                                <div class="card card-sm highlight-card one">
+                                    <h3 class="title-3">Air Quality Index</h3>
+                                    <div class="wrapper">
+                                        <span class="m-icon">air</span>
+                                        <ul class="card-list">
+                                            <li class="card-item">
+                                                <p class="title-1">@Model.PM2_5</p>
+                                                <p class="label-1">PM<sub>2.5</sub></p>
+                                            </li>
+                                            <li class="card-item">
+                                                <p class="title-1">@Model.SO2</p>
+                                                <p class="label-1">SO<sub>2</sub></p>
+                                            </li>
+                                            <li class="card-item">
+                                                <p class="title-1">@Model.NO</p>
+                                                <p class="label-1">NO<sub>2</sub></p>
+                                            </li>
+                                            <li class="card-item">
+                                                <p class="title-1">@Model.O3</p>
+                                                <p class="label-1">O<sub>3</sub></p>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <span class="badge aqi-@Model.AQI label-@Model.AQI" title="aqi message">@service.GetAqiLevel(Model.AQI)</span>
+                                </div>
+                                <div class="card card-sm highlight-card tow">
+                                    <h3 class="title-2">Sunrise & Sunset</h3>
+                                    <div class="card-list">
+                                        <div class="card-item">
+                                            <span class="m-icon">clear_day</span>
+                                            <div>
+                                                <p class="label-1">Sunrise</p>
+                                                <p class="title-1">@service.GetTime(Model.Sunrise, Model.Timezone)</p>
+                                            </div>
+                                        </div>
+                                        <div class="card-item">
+                                            <span class="m-icon">clear_night</span>
+                                            <div>
+                                                <p class="label-1">Sunset</p>
+                                                <p class="title-1">@service.GetTime(Model.Sunset, Model.Timezone)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card card-sm highlight-card">
+                                    <h3 class="title-3">Humidity</h3>
+                                    <div class="wrapper">
+                                        <span class="m-icon">humidity_percentage</span>
+                                        <p class="title-1">@Model.Humidity<sub>%</sub></p>
+                                    </div>
+                                </div>
+                                <div class="card card-sm highlight-card">
+                                    <h3 class="title-3">Pressure</h3>
+                                    <div class="wrapper">
+                                        <span class="m-icon">airwave</span>
+                                        <p class="title-1">@Model.Pressure<sub>hPa</sub></p>
+                                    </div>
+                                </div>
+                                <div class="card card-sm highlight-card">
+                                    <h3 class="title-3">Visibility</h3>
+                                    <div class="wrapper">
+                                        <span class="m-icon">visibility</span>
+                                        <p class="title-1">@Model.Visibility<sub>km</sub></p>
+                                    </div>
+                                </div>
+                                <div class="card card-sm highlight-card">
+                                    <h3 class="title-3">Feels Like</h3>
+                                    <div class="wrapper">
+                                        <span class="m-icon">thermostat</span>
+                                        <p class="title-1">@Model.FeelsLike&deg;<sup>c</sup></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="section hourly-forecast" aria-label="hourly-forecast" data-hourly-forecast>
+                        <h2 class="title-2">Today at</h2>
+                        <div class="slider-container">
+                            <ul class="slider-list">
+                                @foreach(var daily in Model.DailyForecast){
+                                    <li class="slider-item">
+                                        <div class="card card-sm slider-card">
+                                            <p class="body-3">@service.GetTime(daily.Dt, Model.Timezone)</p>
+                                            <img src="@Url.Content(Model.ConvertiIcona(daily.Icon))" width="48" height="48"
+                                                 loading="lazy" alt="" class="weather-icon" title="">
+                                            <p class="body-3">@daily.MaxTemperature&deg;</p>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                            <ul class="slider-list" data-wind>
+                                @foreach (var daily in Model.DailyForecast)
+                                {
+                                    <li class="slider-item">
+                                        <div class="card card-sm slider-card">
+                                            <p class="body-3">@service.GetTime(daily.Dt, Model.Timezone)</p>
+                                            <img src="~/images/weather_icons/direction.png" width="48" height="48"
+                                                 loading="lazy" alt="direction" class="weather-icon" title="" style="transform: rotate(@(daily.Direction - 180)deg)">
+                                            <p class="body-3">@service.MpsToKmh(@daily.Speed) km/h</p>
+                                        </div>
+                                    </li>
+                                }                                
+                            </ul>
+                        </div>
+                    </div>
+                    <footer class="footer">
+                        <p class="body-3">
+                            Copyright 2025. All Rights Reserved.
+                        </p>
+
+                        <p class="body-3">
+                            Powered By <a href="https://openweathermap.org/api" title="Free OpenWeather Api" target="_blank"
+                                          rel="noopener">
+                                <img src="~/images/openweather.png" width="150" height="30" loading="lazy"
+                                     alt="OpenWeather">
+                            </a>
+                        </p>
+                    </footer>
+                </div>
+
+                
+                <div class="loading" data-loading></div>
+
+                <!--<section class="error-content" data-error-content>
+
+                    <h2 class="heading">404</h2>
+
+                    <p class="body-1">Page not found!</p>
+
+                    <a href="#/weather?lat=51.5073219&lon=-0.1276474" class="btn-primary">
+                        <span class="span">Go Home</span>
+                    </a>
+
+                </section> -->
+
+
+                    <!-- Mostra l'errore se presente -->
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="text-danger">@ViewBag.Error</p>
+                            </div>
+                        </div>
+                    }
+
+            </article>
+        </main>
+    }
+</body>
+
+</html>

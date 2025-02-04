@@ -250,15 +250,33 @@ namespace ProgettoMeteo.Models
         {
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Post, $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={geminiApi}");
-            var content = new StringContent($"{{\r\n    \"contents\": \r\n    [{{\r\n        \"parts\":\r\n            [{{\"text\": \"{testo}.\"}}]\r\n    }}]\r\n}}", System.Text.Encoding.UTF8, "application/json");
+
+            // Definisci la personalità
+            var personality = @"
+                Sei un assistente meteorologico amichevole ed entusiasta con le seguenti caratteristiche:
+                - Parli in modo informale e amichevole
+                - Mostri entusiasmo per i fenomeni meteorologici
+                - Aggiungi curiosità interessanti sul meteo quando pertinenti
+        
+                Rispondi alla seguente domanda mantenendo questa personalità, ricordati che però devi rispondere solo a domande inerenti fenomeni naturali o metereologici
+                (Se domanda riguarda qualcos'altro dovrai rispondere che non puoi rispondere a quel tipo di domande):";
+
+            // Combina personalità e domanda
+            var fullPrompt = $"{personality}\n\nDomanda: {testo}";
+
+            var content = new StringContent($@"{{
+                ""contents"": [{{
+                    ""parts"": [{{
+                        ""text"": ""{fullPrompt.Replace("\"", "\\\"").Replace("\n", "\\n")}""
+                    }}]
+                }}]
+            }}", System.Text.Encoding.UTF8, "application/json");
+
             request.Content = content;
             var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
-
             dynamic data = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
-
             string risTesto = data["candidates"][0]["content"]["parts"][0]["text"].ToString();
-
             return Markdown.ToHtml(risTesto);
         }
 
